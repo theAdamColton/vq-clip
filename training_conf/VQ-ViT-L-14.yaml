@@ -1,0 +1,63 @@
+# lightning.pytorch==2.1.0dev
+seed_everything: true
+trainer:
+  accelerator: auto
+  strategy: auto
+  devices: auto
+  num_nodes: 1
+  precision: bf16
+  logger: null
+  callbacks: null
+  fast_dev_run: false
+  max_epochs: 4
+  min_epochs: null
+  # roughly 4 epochs
+  max_steps: -1
+  min_steps: null
+  max_time: null
+  limit_train_batches: null
+  limit_val_batches: null
+  limit_test_batches: null
+  limit_predict_batches: null
+  overfit_batches: 0.0
+  val_check_interval: 2000
+  check_val_every_n_epoch: 1
+  num_sanity_val_steps: 0
+  log_every_n_steps: 1
+  enable_checkpointing: true
+  enable_progress_bar: null
+  enable_model_summary: null
+  accumulate_grad_batches: 1
+  gradient_clip_val: 0.5
+  gradient_clip_algorithm: null
+  deterministic: null
+  benchmark: null
+  inference_mode: true
+  use_distributed_sampler: true
+  profiler: null
+  detect_anomaly: false
+  barebones: false
+  plugins: null
+  sync_batchnorm: false
+  reload_dataloaders_every_n_epochs: 0
+  default_root_dir: out/VQ-ViT-L-14/
+
+model:
+  vq_clip_config_path: ./model_conf/vq-ViT-L-14/config.json
+  pretrained_clip_url: openai/clip-vit-large-patch14
+  warmup_steps: 150
+  max_lr: 3.e-4
+  min_lr: 4.e-05
+  lr_gamma: 0.25
+  lr_cycle_steps: 10000
+
+  imagenet_path: null
+  validation_batch_size: 128
+
+  torch_compile: false
+data:
+  key_name: l14
+  path_train: null
+  path_val: null
+  batch_size: 16384
+ckpt_path: null

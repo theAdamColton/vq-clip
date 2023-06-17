@@ -1,0 +1,7 @@
+einops==0.6.1
+lightning==2.0.3
+numpy==1.24.3
+torch==2.0.1
+torchvision==0.15.2
+tqdm==4.65.0
+transformers==4.30.2
