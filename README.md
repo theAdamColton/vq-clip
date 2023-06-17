@@ -10,10 +10,6 @@ Both of these models were trained for roughly one epoch on datacomp medium, with
 
 * [k=32 32 heads, residual quantization](https://huggingface.co/adams-story/vq-ViT-L-14-k32): Gets 0.51 @1 on imagenet validation. 
 
-Contrastive Loss vs. step:
-
-<img width="500" alt="Screenshot 2023-06-16 at 8 50 28 PM" src="https://github.com/theAdamColton/vq-clip/assets/72479734/8e04a283-1995-4ba5-b0da-f89309fb0d03">
-
 
 
 # Set up env
