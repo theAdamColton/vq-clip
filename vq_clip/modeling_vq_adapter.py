@@ -1,8 +1,10 @@
 from torch import nn
+from torch.optim import SGD, Adagrad
 
 from transformers import PreTrainedModel, PretrainedConfig
 from .modules import Block
-from .vector_quantize_pytorch import VectorQuantize, ResidualVQ, calculate_perplexity
+from vector_quantize_pytorch import VectorQuantize, ResidualVQ
+from .perplexity import calculate_perplexity
 
 
 class VQAdapterConfig(PretrainedConfig):
@@ -42,6 +44,9 @@ class VQAdapterConfig(PretrainedConfig):
         vq_affine_param_codebook_decay: float = 0.9,
         # the v that controls optimistic vs pessimistic update for synchronous update rule (21) https://minyoungg.github.io/vqtorch/assets/draft_050523.pdf
         vq_sync_update_v: float = 0.0,
+
+        # codebook optimizer
+        codebook_lr: float = 10.,
 
         # rq_specific args
         rq_quantize_dropout=False,
@@ -90,9 +95,11 @@ class VQAdapterConfig(PretrainedConfig):
         self.vq_affine_param_codebook_decay = vq_affine_param_codebook_decay
         self.vq_sync_update_v = vq_sync_update_v
 
-        rq_quantize_dropout=rq_quantize_dropout
-        rq_quantize_dropout_cutoff_index=rq_quantize_dropout_cutoff_index
-        rq_quantize_dropout_multiple_of=rq_quantize_dropout_multiple_of
+        self.codebook_lr=codebook_lr
+
+        self.rq_quantize_dropout=rq_quantize_dropout
+        self.rq_quantize_dropout_cutoff_index=rq_quantize_dropout_cutoff_index
+        self.rq_quantize_dropout_multiple_of=rq_quantize_dropout_multiple_of
 
         self.is_rq = is_rq
         self.mlp_dim = mlp_dim
@@ -112,6 +119,9 @@ class VQAdapterModel(PreTrainedModel):
             for k, v in config.to_dict().items()
             if k.startswith("vq_")
         }
+
+        if quantizer_args['learnable_codebook']:
+            quantizer_args['in_place_codebook_optimizer'] = lambda *args, **kwargs: Adagrad(*args, lr=config.codebook_lr, **kwargs)
 
         quantizer_args["dim"] = config.clip_dim
         if config.is_rq:

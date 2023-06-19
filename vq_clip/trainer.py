@@ -2,15 +2,12 @@ import torch
 import lightning.pytorch as pl
 from torch.optim import AdamW
 from transformers import (
-    CLIPConfig,
     CLIPModel,
-    AutoTokenizer,
-    AutoProcessor,
     CLIPProcessor,
 )
 from transformers.models.clip.modeling_clip import clip_loss
 
-from .modeling_vq_clip import VQCLIPConfig, VQCLIPModel, VQCLIPOutput
+from .modeling_vq_clip import VQCLIPConfig, VQCLIPModel
 from .modeling_vq_adapter import VQAdapterModel, VQAdapterConfig
 from .cosine_annealing_warmup import CosineAnnealingWarmupRestarts
 from .eval import zero_shot_eval
@@ -128,6 +125,7 @@ class LightningVQCLIPTrainer(pl.LightningModule):
                         )
                 self.log_dict(dict(imagenet_top1=top1, imagenet_top5=top5))
 
+        self.eval()
         img_emb, text_emb = batch
         loss, logs = self.step(img_emb, text_emb)
 

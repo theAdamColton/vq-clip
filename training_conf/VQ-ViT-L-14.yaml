@@ -20,7 +20,7 @@ trainer:
   limit_test_batches: null
   limit_predict_batches: null
   overfit_batches: 0.0
-  val_check_interval: 2000
+  val_check_interval: 20
   check_val_every_n_epoch: 1
   num_sanity_val_steps: 0
   log_every_n_steps: 1
@@ -45,7 +45,7 @@ trainer:
 model:
   vq_clip_config_path: ./model_conf/vq-ViT-L-14/config.json
   pretrained_clip_url: openai/clip-vit-large-patch14
-  warmup_steps: 150
+  warmup_steps: 300
   max_lr: 3.e-4
   min_lr: 4.e-05
   lr_gamma: 0.25

@@ -6,10 +6,9 @@ Make sure that the CLIP model you use is the same as the one used to obtain the
 pre embeddings
 """
 
-import math
 import torch.utils.data
 from math import ceil
-from typing import List, Optional, Tuple
+from typing import List
 import lightning.pytorch as pl
 import numpy as np
 from glob import glob
