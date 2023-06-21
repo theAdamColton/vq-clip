@@ -10,7 +10,7 @@ Both of these models were trained for roughly one epoch on datacomp medium, with
 
 * [k=32 32 heads, residual quantization](https://huggingface.co/adams-story/vq-ViT-L-14-k32): Gets 0.51 @1 on imagenet validation. 
 
-* [k=64 32 heads, vq quantization with affine parameters](https://huggingface.co/adams-story/vq-ViT-L-14-k64-d32): Gets 0.58 @1 on imagenet validation
+* [k=64 32 heads, vq quantization with affine parameters](https://huggingface.co/adams-story/vq-ViT-L-14-k64-d32): Gets 0.586 @1 on imagenet validation
 
 # Set up env
 
