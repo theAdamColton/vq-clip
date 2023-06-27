@@ -8,7 +8,7 @@ Finetune a CLIP model with a vector quantization bottleneck layer over the outpu
 
 Both of these models were trained for roughly one epoch on datacomp medium, with a batch size of 16384. See `training_conf/VQ-ViT-L-14.yaml` for the training parameters that were used.
 
-* [k=32 32 heads, multiheaded vq](https://huggingface.co/adams-story/vq-ViT-L-14-k64-d32-ema/tree/main): Gets 0.642 @1 on imagenet. Trained with EMA codebook rather than learnable. 
+* [k=64 32 heads, multiheaded vq](https://huggingface.co/adams-story/vq-ViT-L-14-k64-d32-ema/tree/main): Gets 0.642 @1 on imagenet. Trained with EMA codebook rather than learnable. 
 
 * [k=32 32 heads, residual quantization](https://huggingface.co/adams-story/vq-ViT-L-14-k32): Gets 0.51 @1 on imagenet validation. 
 
