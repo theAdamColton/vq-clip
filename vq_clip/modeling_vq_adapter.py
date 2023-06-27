@@ -120,8 +120,8 @@ class VQAdapterModel(PreTrainedModel):
             if k.startswith("vq_")
         }
 
-        if quantizer_args['learnable_codebook']:
-            quantizer_args['in_place_codebook_optimizer'] = lambda *args, **kwargs: Adagrad(*args, lr=config.codebook_lr, **kwargs)
+        #if quantizer_args['learnable_codebook']:
+            #quantizer_args['in_place_codebook_optimizer'] = lambda *args, **kwargs: Adagrad(*args, lr=config.codebook_lr, **kwargs)
 
         quantizer_args["dim"] = config.clip_dim
         if config.is_rq:

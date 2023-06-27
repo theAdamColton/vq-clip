@@ -251,8 +251,10 @@ class VQCLIPModel(PreTrainedModel):
         """
         sd = dict()
         for k, v in self.state_dict().items():
-            if not "clip_model" in k:
-                sd[k] = v
+            if k.startswith("clip_model"):
+                continue
+            sd[k] = v
+
         return self.save_pretrained(*args, state_dict=sd, **kwargs)
 
     @staticmethod

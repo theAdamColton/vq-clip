@@ -64,7 +64,7 @@ class ImageTextPairDatasetWorker(IterableDataset):
         self.data_files = data_files
 
         # increasing this number improves random sampling
-        self.num_files_to_load = 1
+        self.num_files_to_load = 2
 
         self.batch_size = batch_size
 
@@ -88,6 +88,7 @@ class ImageTextPairDatasetWorker(IterableDataset):
                 image_data.append(dat[self.key_name + "_img"])
                 n_loaded += 1
                 assert len(text_data[-1]) == len(image_data[-1])
+                assert len(text_data[0]) == len(image_data[0])
             except Exception as e:
                 print("error loading file", self.data_files[self.file_i], e)
             self.file_i += 1

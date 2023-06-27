@@ -257,7 +257,7 @@
     },
     "is_decoder": false,
     "is_encoder_decoder": false,
-    "is_rq": true,
+    "is_rq": false,
     "label2id": {
       "LABEL_0": 0,
       "LABEL_1": 1
@@ -312,7 +312,7 @@
     "vq_ema_update": false,
     "vq_eps": 1e-05,
     "vq_heads": 32,
-    "vq_kmeans_init": false,
+    "vq_kmeans_init": true,
     "vq_kmeans_iters": 20,
     "vq_learnable_codebook": true,
     "vq_orthogonal_reg_active_codes_only": false,
@@ -326,10 +326,10 @@
     "vq_sync_affine_param": false,
     "vq_sync_codebook": false,
     "vq_sync_kmeans": true,
-    "vq_sync_update_v": 0.05,
-    "vq_threshold_ema_dead_code": 2,
+    "vq_sync_update_v": 0.01,
+    "vq_threshold_ema_dead_code": 64,
     "vq_use_cosine_sim": false,
-    "codebook_lr": 10.0,
+    "codebook_lr": 0.1,
     "rq_quantize_dropout": true,
     "rq_quantize_dropout_cutoff_index": 1,
     "rq_quantize_dropout_multiple_of": 2

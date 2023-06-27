@@ -9,7 +9,7 @@ trainer:
   logger: null
   callbacks: null
   fast_dev_run: false
-  max_epochs: 2
+  max_epochs: 3
   min_epochs: null
   max_steps: -1
   min_steps: null
@@ -44,10 +44,10 @@ trainer:
 model:
   vq_clip_config_path: ./model_conf/vq-ViT-L-14/config.json
   pretrained_clip_url: openai/clip-vit-large-patch14
-  warmup_steps: 500
-  max_lr: 3.e-4
+  warmup_steps: 2000
+  max_lr: 8.e-4
   min_lr: 5.e-6
-  lr_gamma: 0.25
+  lr_gamma: 0.45
   lr_cycle_steps: 20000
 
   imagenet_path: null

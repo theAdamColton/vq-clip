@@ -1,4 +1,5 @@
 import torch
+from torch import nn
 import lightning.pytorch as pl
 from torch.optim import AdamW
 from transformers import (
@@ -13,6 +14,24 @@ from .cosine_annealing_warmup import CosineAnnealingWarmupRestarts
 from .eval import zero_shot_eval
 
 
+def models_eq(model1:nn.Module, model2:nn.Module):
+    model1 = model1.to(model2.device)
+    sd1 = model1.state_dict()
+    sd2 = model2.state_dict()
+    def _check(sd1, sd2):
+        for k,v in sd1.items():
+            get = sd2.get(k)
+            if get is None:
+                print(k, "not in model2")
+                return False
+            if not torch.equal(v, get):
+                print(k, v, " ne ", get)
+                return False
+        return True
+
+    return _check(sd1, sd2) and _check(sd2, sd1)
+
+
 def clip_loss_from_embeds(text_embeds, image_embeds, logit_scale):
     logits_per_text = torch.matmul(text_embeds, image_embeds.t()) * logit_scale
     return clip_loss(logits_per_text)
@@ -25,7 +44,7 @@ class LightningVQCLIPTrainer(pl.LightningModule):
 
     def __init__(
         self,
-        vq_clip_config_path: str = "./model_conf/vq-ViT-L-14/config.json",
+        vq_clip_config_path: str = "./model_conf/vq-ViT-L-14-k64/config.json",
         # pretrained clip args
         pretrained_clip_url: str = "openai/clip-vit-base-patch32",
         # training_specific args
@@ -73,6 +92,8 @@ class LightningVQCLIPTrainer(pl.LightningModule):
         vq_clip = self.__get_vq_clip_model()
         vq_clip.save_adapter(save_directory=path)
         print("Saved HF format", path)
+        vq_clip_loaded = VQCLIPModel.from_pretrained_clip(path, self.clip_url)
+        assert models_eq(vq_clip_loaded, vq_clip) is True
 
     def step(self, img_emb, text_emb):
         """

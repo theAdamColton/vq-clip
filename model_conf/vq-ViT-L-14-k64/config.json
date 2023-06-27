@@ -257,7 +257,7 @@
     },
     "is_decoder": false,
     "is_encoder_decoder": false,
-    "is_rq": true,
+    "is_rq": false,
     "label2id": {
       "LABEL_0": 0,
       "LABEL_1": 1
@@ -305,7 +305,7 @@
     "vq_affine_param_codebook_decay": 0.9,
     "vq_channel_last": true,
     "vq_codebook_dim": 32,
-    "vq_codebook_size": 32,
+    "vq_codebook_size": 64,
     "vq_commitment_use_cross_entropy_loss": false,
     "vq_commitment_weight": 0.05,
     "vq_decay": 0.85,
@@ -327,10 +327,10 @@
     "vq_sync_codebook": false,
     "vq_sync_kmeans": true,
     "vq_sync_update_v": 0.0,
-    "vq_threshold_ema_dead_code": 0,
+    "vq_threshold_ema_dead_code": 2,
     "vq_use_cosine_sim": false,
     "rq_quantize_dropout": true,
     "rq_quantize_dropout_cutoff_index": 1,
-    "rq_quantize_dropout_multiple_of": 2
+    "rq_quantize_dropout_multiple_of": 4
   }
 }
