@@ -53,7 +53,7 @@ codes = outputs.image_codes # the vq codes
 
 # Set up training data
 
-You can train VQ-CLIP from a dataset of text-image CLIP embeddings. You can find these on [HuggingFace](https://huggingface.co/mlfoundations), I'd recommend using the [medium scale](https://huggingface.co/datasets/mlfoundations/datacomp_medium) dataset. Medium scale contains 128M image/text CLIP embedding pairs, amounting to 750 GB.
+You can train VQ-CLIP from a dataset of text-image CLIP embeddings. You can find these on [HuggingFace](https://huggingface.co/mlfoundations), I'd recommend using the image/text embeddings from  [datacomp 1B](mlfoundations/datacomp_1b) dataset. 
 
 Only the .npx files are needed, these can be downloaded using the huggingface `snapshot_download` function.
 
