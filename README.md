@@ -8,6 +8,8 @@ Finetune a CLIP model with a vector quantization bottleneck layer over the outpu
 
 Both of these models were trained for roughly one epoch on datacomp medium, with a batch size of 16384. See `training_conf/VQ-ViT-L-14.yaml` for the training parameters that were used.
 
+* [k=64 32 heads, multiheaded vq](https://huggingface.co/adams-story/vq-ViT-L-14-k64-d32-ema/tree/main): Gets 0.642 @1 on imagenet. Trained with EMA codebook rather than learnable. 
+
 * [k=32 32 heads, residual quantization](https://huggingface.co/adams-story/vq-ViT-L-14-k32): Gets 0.51 @1 on imagenet validation. 
 
 * [k=64 32 heads, vq quantization with affine parameters](https://huggingface.co/adams-story/vq-ViT-L-14-k64-d32): Gets 0.586 @1 on imagenet validation
@@ -51,7 +53,7 @@ codes = outputs.image_codes # the vq codes
 
 # Set up training data
 
-You can train VQ-CLIP from a dataset of text-image CLIP embeddings. You can find these on [HuggingFace](https://huggingface.co/mlfoundations), I'd recommend using the [medium scale](https://huggingface.co/datasets/mlfoundations/datacomp_medium) dataset. Medium scale contains 128M image/text CLIP embedding pairs, amounting to 750 GB.
+You can train VQ-CLIP from a dataset of text-image CLIP embeddings. You can find these on [HuggingFace](https://huggingface.co/mlfoundations), I'd recommend using the image/text embeddings from  [datacomp 1B](mlfoundations/datacomp_1b) dataset. 
 
 Only the .npx files are needed, these can be downloaded using the huggingface `snapshot_download` function.
 
