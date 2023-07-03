@@ -154,6 +154,9 @@ class VQAdapterModel(PreTrainedModel):
 
         self.out_feature_net = nn.Identity()
 
+    def _init_weights(self, _):
+        pass
+
     def forward(self, z, return_perplexity=False):
         """
         z: B by D

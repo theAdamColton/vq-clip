@@ -52,6 +52,9 @@ class VQCLIPModel(PreTrainedModel):
                 VQAdapterConfig.from_dict(config.text_vq_adapter_config_dict)
             )
 
+    def _init_weights(self, module):
+        pass
+
     def get_text_features(
         self,
         input_ids: Optional[torch.Tensor] = None,
