@@ -1,3 +1,4 @@
+import torch
 from torch import nn
 from torch.optim import SGD, Adagrad
 
@@ -153,6 +154,11 @@ class VQAdapterModel(PreTrainedModel):
         )
 
         self.out_feature_net = nn.Identity()
+
+    def decode(self, codes: torch.LongTensor):
+        z = self.vq.get_codes_from_indices(codes)
+        z = self.vq.project_out(z)
+        return z
 
     def _init_weights(self, _):
         pass
