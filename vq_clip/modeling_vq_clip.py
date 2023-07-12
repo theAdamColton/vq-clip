@@ -1,3 +1,4 @@
+import contextlib
 from typing import Optional, Union, Tuple
 from dataclasses import dataclass
 import torch
@@ -248,25 +249,43 @@ class VQCLIPModel(PreTrainedModel):
             image_codes=image_codes,
         )
 
-    def save_adapter(self, *args, **kwargs):
-        """
-        Save only the adapter, and not the clip_model
-        """
-        sd = dict()
-        for k, v in self.state_dict().items():
-            if k.startswith("clip_model"):
-                continue
-            sd[k] = v
-
-        return self.save_pretrained(*args, state_dict=sd, **kwargs)
-
     @staticmethod
-    def from_pretrained_clip(vq_clip_path: str, clip_path: str):
+    def from_pretrained_clip(clip_path: str, vision_vq_adapter_path: Optional[str] = None, text_vq_adapter_path: Optional[str] = None):
         """
         load only the adapter from the vq_clip_path, and load the clip model
         from the clip_path
         """
-        vq_clip = VQCLIPModel.from_pretrained(vq_clip_path)
+
+        assert not (text_vq_adapter_path is None and vision_vq_adapter_path is None)
+
+        clip_config = CLIPConfig.from_pretrained(clip_path).to_dict()
+        if vision_vq_adapter_path is not None:
+            vision_vq_config = VQAdapterConfig.from_pretrained(vision_vq_adapter_path).to_dict()
+        else: vision_vq_config = None
+        if text_vq_adapter_path is not None:
+            text_vq_config = VQAdapterConfig.from_pretrained(text_vq_adapter_path).to_dict()
+        else: text_vq_config = None
+
+        vq_clip_config = VQCLIPConfig(clip_config_dict=clip_config, vision_vq_adapter_config_dict=vision_vq_config, text_vq_adapter_config_dict=text_vq_config)
+
+        init_provider = contextlib.suppress
+        try:
+            from accelerate import init_empty_weights
+            init_provider = init_empty_weights
+        except ImportError:
+            print("Could not do vq-clip lazy init")
+
+        with init_provider():
+            vq_clip = VQCLIPModel(vq_clip_config)
+
         clip: CLIPModel = CLIPModel.from_pretrained(clip_path)
         vq_clip.clip_model = clip
+
+        if vision_vq_adapter_path is not None:
+            vision_vq_adapter = VQAdapterModel.from_pretrained(vision_vq_adapter_path)
+            vq_clip.vision_vq_adapter = vision_vq_adapter
+        if text_vq_adapter_path is not None:
+            text_vq_adapter = VQAdapterModel.from_pretrained(text_vq_adapter_path)
+            vq_clip.text_vq_adapter = text_vq_adapter
+
         return vq_clip

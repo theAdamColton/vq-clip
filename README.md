@@ -33,7 +33,7 @@ import requests
 from vq_clip import VQCLIPModel
 from transformers import CLIPProcessor
 
-model = VQCLIPModel.from_pretrained_clip(vq_clip_path="adams-story/vq-ViT-L-14-k32", clip_path="openai/clip-vit-large-patch14")
+model = VQCLIPModel.from_pretrained_clip(clip_path="openai/clip-vit-large-patch14", vision_vq_adapter_path="adams-story/vq-ViT-L-14-k32", )
 
 # make prediction
 processor = CLIPProcessor.from_pretrained("openai/clip-vit-large-patch14")
@@ -95,7 +95,7 @@ from vq_clip import VQCLIPModel
 from transformers import CLIPProcessor
 from vq_clip.eval import zero_shot_eval
 
-model = VQCLIPModel.from_pretrained_clip(vq_clip_path="adams-story/vq-ViT-L-14-k32", clip_path="openai/clip-vit-large-patch14")
+model = VQCLIPModel.from_pretrained_clip(clip_path="openai/clip-vit-large-patch14", vision_vq_adapter_path="adams-story/vq-ViT-L-14-k32", )
 processor = CLIPProcessor.from_pretrained("openai/clip-vit-large-patch14")
 
 with torch.no_grad():

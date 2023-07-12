@@ -39,12 +39,12 @@ def clip_loss_from_embeds(text_embeds, image_embeds, logit_scale):
 
 class LightningVQCLIPTrainer(pl.LightningModule):
     """
-    Trainer for a VQ adapter on top of a CLIP vision tower
+    Trainer for a vision VQ adapter on top of a CLIP vision tower
     """
 
     def __init__(
         self,
-        vq_clip_config_path: str = "./model_conf/vq-ViT-L-14-k64/config.json",
+        vision_vq_config_path: str = "./model_conf/vq-ViT-L-14-k64/config.json",
         # pretrained clip args
         pretrained_clip_url: str = "openai/clip-vit-base-patch32",
         # training_specific args
@@ -59,16 +59,14 @@ class LightningVQCLIPTrainer(pl.LightningModule):
         validation_batch_size: int = 512,
     ):
         super().__init__()
-        self.vq_clip_config_path = vq_clip_config_path
-        self.vq_clip_config = VQCLIPConfig.from_pretrained(vq_clip_config_path)
+        self.vision_vq_config_path = vision_vq_config_path
+        self.vision_vq_config = VQAdapterConfig.from_pretrained(vision_vq_config_path)
+        self.vision_vq_adapter = VQAdapterModel(self.vision_vq_config)
 
         self.clip_url = pretrained_clip_url
         self.imagenet_path = imagenet_path
         self.validation_batch_size = validation_batch_size
 
-        self.vision_vq_adapter = VQAdapterModel(
-            VQAdapterConfig.from_dict(self.vq_clip_config.vision_vq_adapter_config_dict)
-        )
 
         if torch_compile:
             self.vision_vq_adapter = torch.compile(self.vision_vq_adapter)
@@ -79,21 +77,11 @@ class LightningVQCLIPTrainer(pl.LightningModule):
         self.lr_gamma = lr_gamma
         self.lr_cycle_steps = lr_cycle_steps
 
-    def __get_vq_clip_model(self) -> VQCLIPModel:
-        vq_clip = VQCLIPModel(self.vq_clip_config)
-        vq_clip.vision_vq_adapter = self.vision_vq_adapter
-        vq_clip.clip_model = CLIPModel.from_pretrained(self.clip_url)
-        return vq_clip.to(self.device)
-
     def on_save_checkpoint(self, _):
         self.save_hf(self.logger.log_dir + "/hf/")
 
     def save_hf(self, path: str = ""):
-        vq_clip = self.__get_vq_clip_model()
-        vq_clip.save_adapter(save_directory=path)
-        print("Saved HF format", path)
-        vq_clip_loaded = VQCLIPModel.from_pretrained_clip(path, self.clip_url)
-        assert models_eq(vq_clip_loaded, vq_clip) is True
+        self.vision_vq_adapter.save_pretrained(path)
 
     def step(self, img_emb, text_emb):
         """
@@ -128,7 +116,9 @@ class LightningVQCLIPTrainer(pl.LightningModule):
     def validation_step(self, batch, batch_idx):
         if batch_idx == 0:
             # Builds temporary clip model
-            vq_clip = self.__get_vq_clip_model()
+            tmp_dir = "/tmp/vq-vision/"
+            self.save_hf(tmp_dir)
+            vq_clip = VQCLIPModel.from_pretrained_clip(self.clip_url, vision_vq_adapter_path=tmp_dir)
             # uncomment to see how performance w/o adapters is the same as normal pretrained CLIP
             # vq_clip.vision_vq_adapter = None
             # vq_clip.text_vq_adapter = None

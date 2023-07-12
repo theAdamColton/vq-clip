@@ -42,7 +42,6 @@ trainer:
   default_root_dir: out/VQ-ViT-L-14/
 
 model:
-  vq_clip_config_path: ./model_conf/vq-ViT-L-14/config.json
   pretrained_clip_url: openai/clip-vit-large-patch14
   warmup_steps: 2000
   max_lr: 8.e-4

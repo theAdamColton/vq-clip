@@ -19,7 +19,7 @@ trainer:
   limit_test_batches: null
   limit_predict_batches: null
   overfit_batches: 0.0
-  val_check_interval: 2000
+  val_check_interval: 100
   check_val_every_n_epoch: 1
   num_sanity_val_steps: 0
   log_every_n_steps: 1
@@ -27,7 +27,7 @@ trainer:
   enable_progress_bar: null
   enable_model_summary: null
   accumulate_grad_batches: 1
-  gradient_clip_val: 0.5
+  gradient_clip_val: 1.0
   gradient_clip_algorithm: null
   deterministic: null
   benchmark: null
@@ -42,7 +42,6 @@ trainer:
   default_root_dir: out/VQ-ViT-L-14/
 
 model:
-  vq_clip_config_path: ./model_conf/vq-ViT-L-14/config.json
   pretrained_clip_url: openai/clip-vit-large-patch14
   warmup_steps: 500
   max_lr: 3.e-4
@@ -51,12 +50,11 @@ model:
   lr_cycle_steps: 20000
 
   imagenet_path: null
-  validation_batch_size: 128
+  validation_batch_size: 1024
 
   torch_compile: false
 data:
-  key_name: l14
   path_train: null
   path_val: null
-  batch_size: 16384
+  batch_size: 24576
 ckpt_path: null
