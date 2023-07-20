@@ -140,7 +140,7 @@ class VQCLIPModel(PreTrainedModel):
         image_features = self.clip_model.visual_projection(pooled_output)
         image_features = image_features / image_features.norm(dim=-1, keepdim=True)
         if self.vision_vq_adapter:
-            _res = self.vision_vq_adapter(image_features)["z"]
+            _res = self.vision_vq_adapter(image_features)
             image_features = _res['z']
             image_codes = _res['codes']
         else:
