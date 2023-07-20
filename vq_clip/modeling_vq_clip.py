@@ -64,7 +64,8 @@ class VQCLIPModel(PreTrainedModel):
         output_attentions: Optional[bool] = None,
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
-    ) -> torch.FloatTensor:
+        return_codes: Optional[bool] = None,
+    ) -> Union[torch.FloatTensor, Tuple[torch.FloatTensor, Union[torch.FloatTensor, None]]]:
         # Use CLIP model's config for some fields (if specified) instead of those of vision & text components.
         output_attentions = (
             output_attentions
@@ -94,7 +95,14 @@ class VQCLIPModel(PreTrainedModel):
         text_features = text_features / text_features.norm(dim=-1, keepdim=True)
 
         if self.text_vq_adapter:
-            text_features = self.text_vq_adapter(text_features)["z"]
+            _res = self.text_vq_adapter(text_features)
+            text_features = _res['z']
+            text_codes = _res['codes']
+        else:
+            text_codes = None
+
+        if return_codes:
+            return text_features, text_codes
 
         return text_features
 
@@ -104,7 +112,8 @@ class VQCLIPModel(PreTrainedModel):
         output_attentions: Optional[bool] = None,
         output_hidden_states: Optional[bool] = None,
         return_dict: Optional[bool] = None,
-    ) -> torch.FloatTensor:
+        return_codes: Optional[bool] = None,
+    ) -> Union[torch.FloatTensor, Tuple[torch.FloatTensor, Union[torch.FloatTensor, None]]]:
         # Use CLIP model's config for some fields (if specified) instead of those of vision & text components.
         output_attentions = (
             output_attentions
@@ -131,7 +140,14 @@ class VQCLIPModel(PreTrainedModel):
         image_features = self.clip_model.visual_projection(pooled_output)
         image_features = image_features / image_features.norm(dim=-1, keepdim=True)
         if self.vision_vq_adapter:
-            image_features = self.vision_vq_adapter(image_features)["z"]
+            _res = self.vision_vq_adapter(image_features)["z"]
+            image_features = _res['z']
+            image_codes = _res['codes']
+        else:
+            image_codes = None
+
+        if return_codes:
+            return image_features, image_codes
 
         return image_features
 

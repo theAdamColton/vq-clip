@@ -77,6 +77,8 @@ class LightningVQCLIPTrainer(pl.LightningModule):
         self.lr_gamma = lr_gamma
         self.lr_cycle_steps = lr_cycle_steps
 
+        self.save_hyperparameters()
+
     def on_save_checkpoint(self, _):
         self.save_hf(self.logger.log_dir + "/hf/")
 
@@ -119,6 +121,7 @@ class LightningVQCLIPTrainer(pl.LightningModule):
             tmp_dir = "/tmp/vq-vision/"
             self.save_hf(tmp_dir)
             vq_clip = VQCLIPModel.from_pretrained_clip(self.clip_url, vision_vq_adapter_path=tmp_dir)
+            vq_clip.to(self.device)
             # uncomment to see how performance w/o adapters is the same as normal pretrained CLIP
             # vq_clip.vision_vq_adapter = None
             # vq_clip.text_vq_adapter = None

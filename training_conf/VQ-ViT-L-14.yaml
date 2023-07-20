@@ -19,7 +19,7 @@ trainer:
   limit_test_batches: null
   limit_predict_batches: null
   overfit_batches: 0.0
-  val_check_interval: 100
+  val_check_interval: 1000
   check_val_every_n_epoch: 1
   num_sanity_val_steps: 0
   log_every_n_steps: 1
@@ -43,14 +43,14 @@ trainer:
 
 model:
   pretrained_clip_url: openai/clip-vit-large-patch14
-  warmup_steps: 500
+  warmup_steps: 50
   max_lr: 3.e-4
   min_lr: 5.e-6
   lr_gamma: 0.25
   lr_cycle_steps: 20000
 
   imagenet_path: null
-  validation_batch_size: 1024
+  validation_batch_size: 512
 
   torch_compile: false
 data:

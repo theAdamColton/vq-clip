@@ -21,7 +21,7 @@
   "vq_codebook_dim": 32,
   "vq_codebook_size": 64,
   "vq_commitment_use_cross_entropy_loss": false,
-  "vq_commitment_weight": 0.05,
+  "vq_commitment_weight": 0.1,
   "vq_decay": 0.85,
   "vq_ema_update": true,
   "vq_eps": 1e-05,
