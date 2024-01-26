@@ -1,6 +1,6 @@
 # VQ-CLIP
 
-Finetune a CLIP model with a vector quantization bottleneck layer over the output embeddings. The quantization step is only applied to the final normalized CLIP embedding, and can be trained on a dataset of frozed CLIP embeddings.
+Finetune a CLIP model with a vector quantization bottleneck layer over the output embeddings. The quantization step is only applied to the final normalized CLIP embedding, and can be trained on a dataset of frozen CLIP embeddings.
 
 # Pretrained VQ-CLIP models
 
